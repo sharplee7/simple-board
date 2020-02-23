@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: sample
+
+  board-service:
+    container_name: simple-board
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ADDRESS: mysql
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+    ports:
+      - 8080:8080
+    restart: always
+    links:
+      - mysql
+    depends_on:
+      - mysql
